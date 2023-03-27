@@ -1,9 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_list/constants/colors.dart';
+import 'package:flutter_todo_list/model/todo.dart';
 
 class ToDoItem extends StatelessWidget {
-  const ToDoItem({Key? key}) : super(key: key);
+  final ToDo todo;
+  final onToDoChanged;
+  final onDeleteItem;
+
+  const ToDoItem(
+      {Key? key, required this.todo, this.onToDoChanged, this.onDeleteItem})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,21 +17,22 @@ class ToDoItem extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 20),
       child: ListTile(
         onTap: () {
-          print('Clicked on Todo Item.');
+          // print('Clicked on Todo Item.');
+          onToDoChanged(todo);
         },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         tileColor: Colors.white,
         leading: Icon(
-          Icons.check_box,
+          todo.isDone ? Icons.check_box : Icons.check_box_outline_blank,
           color: tdBlue,
         ),
         title: Text(
-          "Check Mail",
+          todo.todoText!,
           style: TextStyle(
               fontSize: 16,
               color: tdBlack,
-              decoration: TextDecoration.lineThrough),
+              decoration: todo.isDone ? TextDecoration.lineThrough : null),
         ),
         trailing: Container(
           padding: EdgeInsets.all(0),
@@ -38,7 +45,8 @@ class ToDoItem extends StatelessWidget {
             iconSize: 18,
             icon: Icon(Icons.delete),
             onPressed: () {
-              print('Clicked on delete icon');
+              // print('Clicked on delete icon');
+              onDeleteItem(todo.id);
             },
           ),
         ),
