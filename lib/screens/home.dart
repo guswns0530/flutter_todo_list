@@ -4,7 +4,7 @@ import '../widgets/todo_item.dart';
 import '../model/todo.dart';
 
 class Home extends StatefulWidget {
-  Home({Key? key}) : super(key: key);
+  const Home({Key? key}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -14,6 +14,7 @@ class _HomeState extends State<Home> {
   final List<ToDo> todoList = ToDo.todoList();
   List<ToDo> _foundToDo = [];
   final _todoController = TextEditingController();
+  final _searchBoxController = TextEditingController();
 
   @override
   void initState() {
@@ -29,6 +30,7 @@ class _HomeState extends State<Home> {
       body: Stack(children: [
         Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            margin: EdgeInsets.only(bottom: 60),
             child: Column(
               children: [
                 searchBox(),
@@ -135,9 +137,11 @@ class _HomeState extends State<Home> {
           todoText: toDo));
     });
     _todoController.clear();
+    _runFilter();
   }
 
-  void _runFilter(String enteredKeyword) {
+  void _runFilter() {
+    String enteredKeyword = _searchBoxController.text;
     List<ToDo> results = [];
     if (enteredKeyword.isEmpty) {
       results = todoList;
@@ -160,8 +164,9 @@ class _HomeState extends State<Home> {
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(20)),
       child: TextField(
+        controller: _searchBoxController,
         onChanged: (value) {
-          _runFilter(value);
+          _runFilter();
         },
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(top: 2),
